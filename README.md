@@ -140,7 +140,7 @@ Langkah menjalankan project backend secara lokal.
 ### 1. Clone repository
 
 ```
-git clone https://github.com/username/numerigo-backend.git
+git clone https://github.com/Dema08/Bckoffice-Game-Interraktif-Rukun-Harapan-Semester-4.git
 ```
 
 ---
@@ -148,7 +148,7 @@ git clone https://github.com/username/numerigo-backend.git
 ### 2. Masuk ke folder project
 
 ```
-cd numerigo-backend
+cd Bckoffice-Game-Interraktif-Rukun-Harapan-Semester-4
 ```
 
 ---
