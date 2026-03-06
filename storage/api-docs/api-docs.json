@@ -1,0 +1,298 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Aplikasi Game Collection",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000"
+        },
+        {
+            "url": "https://backofficegame.timuye.com"
+        }
+    ],
+    "paths": {
+        "/api/matapelajaran": {
+            "get": {
+                "tags": ["Mata Pelajaran"],
+                "summary": "Ambil daftar mata pelajaran",
+                "responses": {
+                    "200": {
+                        "description": "Daftar mata pelajaran"
+                    }
+                }
+            }
+        },
+        "/api/soal/{id}/": {
+            "get": {
+                "tags": ["Soal"],
+                "summary": "Ambil soal berdasarkan ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer" }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": { "type": "integer" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar soal"
+                    }
+                }
+            }
+        },
+        "/api/login/mobile": {
+            "post": {
+                "tags": ["Login"],
+                "summary": "Login siswa",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "kelas_id": { "type": "string" },
+                                    "siswa_id": { "type": "string" }
+                                },
+                                "required": ["kelas_id", "siswa_id"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login berhasil"
+                    }
+                }
+            }
+        },
+        "/api/kelas": {
+            "get": {
+                "tags": ["Kelas"],
+                "summary": "Ambil daftar kelas",
+                "responses": {
+                    "200": {
+                        "description": "Daftar kelas"
+                    }
+                }
+            }
+        },
+        "/api/getkelasbyidsiswa": {
+            "post": {
+                "tags": ["Kelas"],
+                "summary": "Ambil siswa berdasarkan ID kelas",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id_kelas": { "type": "string" }
+                                },
+                                "required": ["id_kelas"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Data siswa"
+                    }
+                }
+            }
+        },
+        "/api/profile": {
+            "get": {
+                "tags": ["Profile"],
+                "summary": "Ambil profil user",
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Data profil user"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": ["Logout"],
+                "summary": "Logout user",
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Logout berhasil"
+                    }
+                }
+            }
+        },
+        "/api/ujian": {
+            "post": {
+                "tags": ["Ujian"],
+                "summary": "Mulai ujian",
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "kelas_id": { "type": "string" },
+                                    "tipe_ujian": {
+                                        "type": "string",
+                                        "enum": ["magic_card", "choose_it"]
+                                    }
+                                },
+                                "required": ["kelas_id", "tipe_ujian"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ujian dimulai"
+                    }
+                }
+            }
+        },
+        "/api/ujian/soal": {
+            "get": {
+                "tags": ["Soal Ujian"],
+                "summary": "Ambil soal ujian",
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "ujian_id",
+                        "in": "query",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar soal ujian"
+                    }
+                }
+            }
+        },
+        "/api/dashboard": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Tampilkan data dashboard untuk guru yang login",
+                "description": "Mengembalikan data dashboard yang difilter berdasarkan kelas yang diajar oleh guru yang sedang login.",
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Data dashboard berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "description": "ID user yang login"
+                                        },
+                                        "full_name": {
+                                            "type": "string",
+                                            "description": "Nama lengkap user"
+                                        },
+                                        "point": {
+                                            "type": "integer",
+                                            "description": "Jumlah poin user"
+                                        },
+                                        "ranking": {
+                                            "type": "string",
+                                            "description": "Peringkat user di kelas, format: {urutan} / {total}"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, token tidak valid atau belum login"
+                    }
+                }
+            }
+        },
+        "/api/jawaban-siswa": {
+            "post": {
+                "tags": ["Jawaban Siswa"],
+                "summary": "Kirim jawaban siswa",
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "ujian_id": { "type": "string" },
+                                    "soal_id": { "type": "string" },
+                                    "jawaban": { "type": "string" },
+                                    "waktu_submit": { "type": "string" }
+                                },
+                                "required": [
+                                    "ujian_id",
+                                    "soal_id",
+                                    "jawaban",
+                                    "waktu_submit"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Jawaban berhasil dikirim"
+                    }
+                }
+            }
+        },
+        "/api/peringkat": {
+            "get": {
+                "tags": ["Peringkat"],
+                "summary": "Ambil peringkat siswa",
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Data peringkat"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "security": [{ "bearerAuth": [] }],
+    "tags": [
+        { "name": "Mata Pelajaran" },
+        { "name": "Soal" },
+        { "name": "Login" },
+        { "name": "Kelas" },
+        { "name": "Profile" },
+        { "name": "Logout" },
+        { "name": "Ujian" },
+        { "name": "Soal Ujian" },
+        { "name": "Dashboard" },
+        { "name": "Jawaban Siswa" },
+        { "name": "Peringkat" }
+    ]
+}
